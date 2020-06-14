@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<settings>
+  <PodcastFullTitle>The name of the podcast</PodcastFullTitle>
+  <SiteHeader>The name that will be displayed on the website</SiteHeader>
+  <RssCategory>An Apple category</RssCategory>
+  <PodcastTitleImage>A filename in the output directory, typically xxx.jpg</PodcastTitleImage>
+  <TitleImageAlign>center</TitleImageAlign>
+  <TitleImageStyle>width: 60%; max-width: 334px; height: auto;</TitleImageStyle>
+  <RssDescription>A short description of the podcast</RssDescription>
+  <Url>The address to the podcast</Url>
+  <Author>The name of the podcast author</Author>
+  <AuthorMail>The e-mail address to the podcast author</AuthorMail>
+  <ItunesUrl>URL to iTunes (cannot be filled in until accepted at iTunes - leave blank for start)</ItunesUrl>
+  <SpotifyUrl>URL to Spotify (cannot be filled in until accepted at Spotify - leave blank for start)</SpotifyUrl>
+  <DescriptionHtml><p>HTML that describes the podcast</p></DescriptionHtml>
+  <QuestionsHtml><p>HTML with contact information</p></QuestionsHtml>
+  <BodyBackground>#eee</BodyBackground>
+  <BodyForeground>#000</BodyForeground>
+  <LinkColor>#006</LinkColor>
+  <LinkHover>#009</LinkHover>
+  <ContentBackground>#fff</ContentBackground>
+  <ContentShadowColor>#ddd</ContentShadowColor>
+  <ImageShadowColor>#fff</ImageShadowColor>
+</settings>

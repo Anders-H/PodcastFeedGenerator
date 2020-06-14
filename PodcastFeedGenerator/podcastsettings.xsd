@@ -1,0 +1,42 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="settings">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="PodcastFullTitle" type="xs:string" />
+        <xs:element name="SiteHeader" type="xs:string" />
+        <xs:element name="RssCategory" type="xs:string" />
+        <xs:element name="PodcastTitleImage" type="xs:string" />
+        <xs:element name="TitleImageAlign" type="xs:string" />
+        <xs:element name="TitleImageStyle" type="xs:string" />
+        <xs:element name="RssDescription" type="xs:string" />
+        <xs:element name="Url" type="xs:string" />
+        <xs:element name="Author" type="xs:string" />
+        <xs:element name="AuthorMail" type="xs:string" />
+        <xs:element name="ItunesUrl" type="xs:string" />
+        <xs:element name="SpotifyUrl" type="xs:string" />
+        <xs:element name="DescriptionHtml">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="p" type="xs:string" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="QuestionsHtml">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="p" type="xs:string" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="BodyBackground" type="xs:string" />
+        <xs:element name="BodyForeground" type="xs:string" />
+        <xs:element name="LinkColor" type="xs:string" />
+        <xs:element name="LinkHover" type="xs:string" />
+        <xs:element name="ContentBackground" type="xs:string" />
+        <xs:element name="ContentShadowColor" type="xs:string" />
+        <xs:element name="ImageShadowColor" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

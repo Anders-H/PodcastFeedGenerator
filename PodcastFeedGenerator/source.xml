@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<podcast>
+  <episodes>
+
+    <episode>
+      <title>Jättefarliga grejer</title>
+      <filename>02_farliga_grejer2</filename>
+      <publishdate>2017-11-22</publishdate>
+      <length>00:34:01</length>
+      <description>Ett bra avsnitt till</description>
+    </episode>
+
+    <episode>
+      <title>Farliga grejer</title>
+      <filename>01_farliga_grejer1</filename>
+      <publishdate>2017-11-21</publishdate>
+      <length>00:34:01</length>
+      <description>Ett bra avsnitt</description>
+    </episode>
+
+  </episodes>
+</podcast>

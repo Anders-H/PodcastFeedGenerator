@@ -1,0 +1,33 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="podcast">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="episodes">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element maxOccurs="unbounded" name="episode">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="title" type="xs:string" />
+                    <xs:element name="filename" type="xs:string" />
+                    <xs:element name="publishdate" type="xs:date" />
+                    <xs:element name="description" type="xs:string" />
+                    <xs:element name="htmlDescription">
+                      <xs:complexType>
+                        <xs:sequence>
+                          <xs:element name="p" type="xs:string" />
+                        </xs:sequence>
+                      </xs:complexType>
+                    </xs:element>
+                    <xs:element name="shortDescription" type="xs:string" />
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>
