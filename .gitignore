@@ -1,9 +1,9 @@
 [Oo]bj/
 [Bb]in/
 .vs/
+.idea/
 TestResults/
 .nuget/
-.idea/
 _ReSharper.*/
 packages/
 artifacts/
@@ -13,6 +13,7 @@ PublishProfiles/
 *.cache
 *.docstates
 _ReSharper.*
+*.exe
 nuget.exe
 *net45.csproj
 *net451.csproj

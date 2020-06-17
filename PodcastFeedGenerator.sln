@@ -5,6 +5,8 @@ VisualStudioVersion = 16.0.30114.105
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PodcastFeedGenerator", "PodcastFeedGenerator\PodcastFeedGenerator.csproj", "{013DBCD4-21BD-4CAD-B52E-8576D408CA6D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PodcastFeedEditor", "PodcastFeedEditor\PodcastFeedEditor.csproj", "{A23119B6-BB91-4099-88ED-FB151117E028}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{013DBCD4-21BD-4CAD-B52E-8576D408CA6D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{013DBCD4-21BD-4CAD-B52E-8576D408CA6D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{013DBCD4-21BD-4CAD-B52E-8576D408CA6D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A23119B6-BB91-4099-88ED-FB151117E028}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A23119B6-BB91-4099-88ED-FB151117E028}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A23119B6-BB91-4099-88ED-FB151117E028}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A23119B6-BB91-4099-88ED-FB151117E028}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
