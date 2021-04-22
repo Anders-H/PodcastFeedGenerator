@@ -7,7 +7,7 @@ namespace PodcastFeedGenerator
 {
     public class Program
     {
-        private const int MaxItemsRss = 30;
+        private const int MaxItemsRss = 1000000;
         private static readonly DynamicContent ContentData = new DynamicContent();
         private static EpisodeList Episodes { get; } = new EpisodeList();
 
@@ -111,7 +111,7 @@ xmlns:googleplay=""http://www.google.com/schemas/play-podcasts/1.0"">
                     i = i.Replace("@Duration@", $"{e.Length}");
                     i = i.Replace("@guid@", $"{ContentData.Url}{e.EpisodeNumber:00}.html");
                     sw.WriteLine(i);
-                    if (episodeCount > MaxItemsRss)
+                    if (episodeCount >= MaxItemsRss)
                         break;
                 }
                 sw.WriteLine(foot);
@@ -310,6 +310,7 @@ xmlns:googleplay=""http://www.google.com/schemas/play-podcasts/1.0"">
             var timeZone = "+" + offset.ToString().PadLeft(2, '0');
             if (offset < 0)
             {
+                // ReSharper disable once IntVariableOverflowInUncheckedContext
                 var i = offset * -1;
                 timeZone = "-" + i.ToString().PadLeft(2, '0');
             }

@@ -56,7 +56,7 @@ namespace PodcastFeedGenerator
                 var l = LengthBytes;
                 if (l <= 0)
                     return 0.0;
-                return ((long)l)/1048576.0;
+                return l/1048576.0;
             }
         }
     }

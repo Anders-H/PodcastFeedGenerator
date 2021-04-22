@@ -22,8 +22,8 @@ namespace PodcastFeedGenerator
                 return "";
 
             return asHtml
-                ? (child.InnerXml ?? "").Trim()
-                : (child.InnerText ?? "").Trim();
+                ? child.InnerXml.Trim()
+                : child.InnerText.Trim();
         }
         
         public string PodcastFullTitle =>
