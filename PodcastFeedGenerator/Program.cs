@@ -94,6 +94,16 @@ xmlns:googleplay=""http://www.google.com/schemas/play-podcasts/1.0"">
 ";
             #endregion
 
+            var fileInfo = new FileInfo(@"output/rss.xml");
+
+            var directory = fileInfo.Directory;
+
+            if (directory == null)
+                throw new SystemException("Directory is null.");
+
+            if (!directory.Exists)
+                directory.Create();
+
             using (var sw = new StreamWriter(@"output/rss.xml", false, Encoding.UTF8))
             {
                 sw.WriteLine(head.Replace("@BuildDate@", DateString(DateTime.Now)));
