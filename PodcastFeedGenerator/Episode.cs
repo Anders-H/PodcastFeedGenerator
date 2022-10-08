@@ -16,7 +16,6 @@ namespace PodcastFeedGenerator
         public string Description { get; }
         public string TitleImage { get; }
         public string HtmlPodcastDescription { get; }
-        public string HtmlPodcastQuestions { get; }
         
         public Episode(
             int episodeNumber,
@@ -37,7 +36,6 @@ namespace PodcastFeedGenerator
             Description = description;
             TitleImage = titleImage;
             HtmlPodcastDescription = htmlPodcastDescription;
-            HtmlPodcastQuestions = htmlPodcastQuestions;
         }
         
         public long LengthBytes

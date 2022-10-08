@@ -270,7 +270,6 @@ xmlns:googleplay=""http://www.google.com/schemas/play-podcasts/1.0"">
                 s.Append($"<p style=\"text-align: {ContentData.TitleImageAlign};\"><img src=\"{ContentData.Url}{episode.TitleImage}\" style=\"{ContentData.TitleImageStyle}\" alt=\"{episode.Title}\"/></p>");
                 s.Append(episode.HtmlPodcastDescription);
                 s.Append($"<p>{episode.Description}</p>");
-                s.Append(episode.HtmlPodcastQuestions);
                 url = $"{ContentData.Url}mp3/{episode.Mp3Filename}";
                 s.Append($@"<audio style=""width: 100%;"" controls>
 <source src=""{url}"" type=""audio/mpeg"">
