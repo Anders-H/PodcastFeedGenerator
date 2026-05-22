@@ -3,25 +3,25 @@ using System.IO;
 using System.Linq;
 using System.Text;
 
-namespace PodcastFeedGenerator
+namespace PodcastFeedGenerator;
+
+public class Program
 {
-    public class Program
+    private const int MaxItemsRss = 1000000;
+    private static readonly DynamicContent ContentData = new();
+    private static EpisodeList Episodes { get; } = [];
+
+    private static void Main()
     {
-        private const int MaxItemsRss = 1000000;
-        private static readonly DynamicContent ContentData = new DynamicContent();
-        private static EpisodeList Episodes { get; } = new EpisodeList();
+        Episodes.Load("source.xml");
+        CreateFeed();
+        CreateWebSite();
+    }
 
-        private static void Main()
-        {
-            Episodes.Load(@"source.xml");
-            CreateFeed();
-            CreateWebSite();
-        }
-
-        private static void CreateFeed()
-        {
-            #region XmlTemplate
-            var head = $@"<?xml version=""1.0"" encoding=""UTF-8""?>
+    private static void CreateFeed()
+    {
+        #region XmlTemplate
+        var head = $@"<?xml version=""1.0"" encoding=""UTF-8""?>
 <rss version=""2.0""
     xmlns:content=""http://purl.org/rss/1.0/modules/content/""
     xmlns:wfw=""http://wellformedweb.org/CommentAPI/""
@@ -72,7 +72,7 @@ xmlns:googleplay=""http://www.google.com/schemas/play-podcasts/1.0"">
     <rawvoice:frequency>Weekly</rawvoice:frequency>
     <rawvoice:subscribe feed=""{ContentData.Url}rss.xml"" googleplay=""{ContentData.Url}rss.xml""></rawvoice:subscribe>";
 
-            string item = $@"<item>
+        string item = $@"<item>
         <title>@Title@</title>
         <link>@guid@</link>
         <pubDate>@PubDate@</pubDate>
@@ -89,48 +89,48 @@ xmlns:googleplay=""http://www.google.com/schemas/play-podcasts/1.0"">
         <itunes:duration>@Duration@</itunes:duration>
 </item>
 ";
-            const string foot = @"</channel>
+        const string foot = @"</channel>
 </rss>
 ";
-            #endregion
+        #endregion
 
-            var fileInfo = new FileInfo(@"output/rss.xml");
+        var fileInfo = new FileInfo(@"output\rss.xml");
 
-            var directory = fileInfo.Directory;
+        var directory = fileInfo.Directory;
 
-            if (directory == null)
-                throw new SystemException("Directory is null.");
+        if (directory == null)
+            throw new SystemException("Directory is null.");
 
-            if (!directory.Exists)
-                directory.Create();
+        if (!directory.Exists)
+            directory.Create();
 
-            using (var sw = new StreamWriter(@"output/rss.xml", false, Encoding.UTF8))
-            {
-                sw.WriteLine(head.Replace("@BuildDate@", DateString(DateTime.Now)));
-                var episodeCount = 0;
-                foreach (var e in Episodes)
-                {
-                    episodeCount++;
-                    var i = item.Replace("@Title@", $@"{e.Title}");
-                    i = i.Replace("@Mp3Length@", e.LengthBytes.ToString(System.Globalization.CultureInfo.InvariantCulture));
-                    i = i.Replace("@PubDate@", DateString(e.PublishedDate));
-                    i = i.Replace("@Description@", e.Description);
-                    i = i.Replace("@HtmlDescription@", $"<p>{e.Description}</p>");
-                    i = i.Replace("@Mp3File@", e.Mp3Filename);
-                    i = i.Replace("@ShortDescription@", e.Description);
-                    i = i.Replace("@Duration@", $"{e.Length}");
-                    i = i.Replace("@guid@", $"{ContentData.Url}{e.EpisodeNumber:00}.html");
-                    sw.WriteLine(i);
-                    if (episodeCount >= MaxItemsRss)
-                        break;
-                }
-                sw.WriteLine(foot);
-            }
-        }
-        private static void CreateWebSite()
+        using (var sw = new StreamWriter(@"output/rss.xml", false, Encoding.UTF8))
         {
-            #region XmlTemplate
-            var template = $@"
+            sw.WriteLine(head.Replace("@BuildDate@", DateString(DateTime.Now)));
+            var episodeCount = 0;
+            foreach (var e in Episodes)
+            {
+                episodeCount++;
+                var i = item.Replace("@Title@", $@"{e.Title}");
+                i = i.Replace("@Mp3Length@", e.LengthBytes.ToString(System.Globalization.CultureInfo.InvariantCulture));
+                i = i.Replace("@PubDate@", DateString(e.PublishedDate));
+                i = i.Replace("@Description@", e.Description);
+                i = i.Replace("@HtmlDescription@", $"<p>{e.Description}</p>");
+                i = i.Replace("@Mp3File@", e.Mp3Filename);
+                i = i.Replace("@ShortDescription@", e.Description);
+                i = i.Replace("@Duration@", $"{e.Length}");
+                i = i.Replace("@guid@", $"{ContentData.Url}{e.EpisodeNumber:00}.html");
+                sw.WriteLine(i);
+                if (episodeCount >= MaxItemsRss)
+                    break;
+            }
+            sw.WriteLine(foot);
+        }
+    }
+    private static void CreateWebSite()
+    {
+        #region XmlTemplate
+        var template = $@"
 <!DOCTYPE html>
 <html lang=""sv"" xmlns=""http://www.w3.org/1999/xhtml"">
 <head>
@@ -217,113 +217,112 @@ xmlns:googleplay=""http://www.google.com/schemas/play-podcasts/1.0"">
 </body>
 </html>
 ";
-            #endregion
-            var s = new StringBuilder();
-            if (!string.IsNullOrWhiteSpace(ContentData.SiteHeader))
-                s.AppendLine($"<h1>{ContentData.SiteHeader}</h1>");
-            s.Append($"<p style=\"text-align: {ContentData.TitleImageAlign};\"><img src=\"{ContentData.Url}{ContentData.PodcastTitleImage}\" style=\"{ContentData.TitleImageStyle}\" alt=\"{ContentData.RssDescription}\"/></p>");
-            s.Append(ContentData.DescriptionHtml);
-            s.Append(ContentData.QuestionsHtml);
-            var url = $"{ContentData.Url}mp3/{Episodes.First().Mp3Filename}";
+        #endregion
+        var s = new StringBuilder();
+        if (!string.IsNullOrWhiteSpace(ContentData.SiteHeader))
+            s.AppendLine($"<h1>{ContentData.SiteHeader}</h1>");
+        s.Append($"<p style=\"text-align: {ContentData.TitleImageAlign};\"><img src=\"{ContentData.Url}{ContentData.PodcastTitleImage}\" style=\"{ContentData.TitleImageStyle}\" alt=\"{ContentData.RssDescription}\"/></p>");
+        s.Append(ContentData.DescriptionHtml);
+        s.Append(ContentData.QuestionsHtml);
+        var url = $"{ContentData.Url}mp3/{Episodes.First().Mp3Filename}";
+        s.Append($@"<audio style=""width: 100%;"" controls>
+<source src=""{url}"" type=""audio/mpeg"">
+</audio>");
+        s.Append($@"<p><b>Ladda hem det senaste avsnittet:</b> <a href=""{url}"" target=""_blank"">{Episodes.First().Mp3Filename}</a> ({Episodes.First().Length} minuter, {Episodes.First().LengthMb:n1} Mb)</p>");
+        s.Append("<p>");
+
+        s.Append("<p></p>");
+        AppendPrenumerera(ref s);
+
+        s.Append(@"<h1>Alla avsnitt</h1>");
+
+        foreach (var episode in Episodes)
+        {
+            s.AppendLine();
+            s.AppendLine();
+            s.Append($@"<h2>Avsnitt {episode.EpisodeNumber}: <a href=""{ContentData.Url}{episode.EpisodeNumber:00}.html"">{episode.Title}</a></h2>");
+            s.Append($"<p><b>Längd:</b> {episode.Length}</p>");
+            s.Append($"<p><b>Filstorlek:</b> {episode.LengthMb:n1} Mb</p>");
+            var lurl = $"{ContentData.Url}mp3/{episode.Mp3Filename}";
+            s.Append($@"<p><b>Ladda hem:</b> <a href=""{lurl}"" target=""_blank"">{lurl}</a></p>");
+            s.Append($"<p>{episode.Description}</p>");
+            s.Append("<p></p>");
+            s.AppendLine();
+            s.AppendLine();
+        }
+
+        using (var sw = new StreamWriter(@"output\index.html", false, Encoding.UTF8))
+        {
+            var website = template.Replace("@Content@", s.ToString());
+            sw.Write(website);
+            sw.Flush();
+            sw.Close();
+        }
+
+        foreach (var episode in Episodes)
+        {
+            s = new StringBuilder();
+
+            s.AppendLine(!string.IsNullOrWhiteSpace(ContentData.SiteHeader)
+                ? $"<h1>{ContentData.PodcastFullTitle} {episode.Title}</h1>"
+                : $"<h1>{episode.Title}</h1>");
+
+            s.Append($"<p style=\"text-align: {ContentData.TitleImageAlign};\"><img src=\"{ContentData.Url}{episode.TitleImage}\" style=\"{ContentData.TitleImageStyle}\" alt=\"{episode.Title}\"/></p>");
+            s.Append(episode.HtmlPodcastDescription);
+            s.Append($"<p>{episode.Description}</p>");
+            url = $"{ContentData.Url}mp3/{episode.Mp3Filename}";
             s.Append($@"<audio style=""width: 100%;"" controls>
 <source src=""{url}"" type=""audio/mpeg"">
 </audio>");
-            s.Append($@"<p><b>Ladda hem det senaste avsnittet:</b> <a href=""{url}"" target=""_blank"">{Episodes.First().Mp3Filename}</a> ({Episodes.First().Length} minuter, {Episodes.First().LengthMb:n1} Mb)</p>");
             s.Append("<p>");
 
             s.Append("<p></p>");
             AppendPrenumerera(ref s);
 
-            s.Append(@"<h1>Alla avsnitt</h1>");
-
-            foreach (var episode in Episodes)
-            {
-                s.AppendLine();
-                s.AppendLine();
-                s.Append($@"<h2>Avsnitt {episode.EpisodeNumber}: <a href=""{ContentData.Url}{episode.EpisodeNumber:00}.html"">{episode.Title}</a></h2>");
-                s.Append($"<p><b>Längd:</b> {episode.Length}</p>");
-                s.Append($"<p><b>Filstorlek:</b> {episode.LengthMb:n1} Mb</p>");
-                var lurl = $"{ContentData.Url}mp3/{episode.Mp3Filename}";
-                s.Append($@"<p><b>Ladda hem:</b> <a href=""{lurl}"" target=""_blank"">{lurl}</a></p>");
-                s.Append($"<p>{episode.Description}</p>");
-                s.Append("<p></p>");
-                s.AppendLine();
-                s.AppendLine();
-            }
-
-            using (var sw = new StreamWriter(@"output/index.html", false, Encoding.UTF8))
+            s.Append($"<p><b>Längd:</b> {episode.Length}</p>");
+            s.Append($"<p><b>Filstorlek:</b> {episode.LengthMb:n1} Mb</p>");
+            var lurl = $"{ContentData.Url}mp3/{episode.Mp3Filename}";
+            s.Append($@"<p><b>Ladda hem:</b> <a href=""{lurl}"" target=""_blank"">{lurl}</a></p>");
+            s.Append("<p></p>");
+            s.Append($@"<p><a href=""{ContentData.Url}"">Tillbaka</a></p>");
+            s.Append("<p></p>");
+            using (var sw = new StreamWriter($@"output/{episode.EpisodeNumber:00}.html", false, Encoding.UTF8))
             {
                 var website = template.Replace("@Content@", s.ToString());
                 sw.Write(website);
                 sw.Flush();
                 sw.Close();
             }
-
-            foreach (var episode in Episodes)
-            {
-                s = new StringBuilder();
-
-                s.AppendLine(!string.IsNullOrWhiteSpace(ContentData.SiteHeader)
-                    ? $"<h1>{ContentData.PodcastFullTitle} {episode.Title}</h1>"
-                    : $"<h1>{episode.Title}</h1>");
-
-                s.Append($"<p style=\"text-align: {ContentData.TitleImageAlign};\"><img src=\"{ContentData.Url}{episode.TitleImage}\" style=\"{ContentData.TitleImageStyle}\" alt=\"{episode.Title}\"/></p>");
-                s.Append(episode.HtmlPodcastDescription);
-                s.Append($"<p>{episode.Description}</p>");
-                url = $"{ContentData.Url}mp3/{episode.Mp3Filename}";
-                s.Append($@"<audio style=""width: 100%;"" controls>
-<source src=""{url}"" type=""audio/mpeg"">
-</audio>");
-                s.Append("<p>");
-
-                s.Append("<p></p>");
-                AppendPrenumerera(ref s);
-
-                s.Append($"<p><b>Längd:</b> {episode.Length}</p>");
-                s.Append($"<p><b>Filstorlek:</b> {episode.LengthMb:n1} Mb</p>");
-                var lurl = $"{ContentData.Url}mp3/{episode.Mp3Filename}";
-                s.Append($@"<p><b>Ladda hem:</b> <a href=""{lurl}"" target=""_blank"">{lurl}</a></p>");
-                s.Append("<p></p>");
-                s.Append($@"<p><a href=""{ContentData.Url}"">Tillbaka</a></p>");
-                s.Append("<p></p>");
-                using (var sw = new StreamWriter($@"output/{episode.EpisodeNumber:00}.html", false, Encoding.UTF8))
-                {
-                    var website = template.Replace("@Content@", s.ToString());
-                    sw.Write(website);
-                    sw.Flush();
-                    sw.Close();
-                }
-            }
         }
+    }
 
-        private static void AppendPrenumerera(ref StringBuilder s)
-        {
-            s.Append("<p>Prenumerera: ");
-            s.Append($@"<a href=""{ContentData.Url}rss.xml"" target=""_blank"">RSS</a>");
+    private static void AppendPrenumerera(ref StringBuilder s)
+    {
+        s.Append("<p>Prenumerera: ");
+        s.Append($@"<a href=""{ContentData.Url}rss.xml"" target=""_blank"">RSS</a>");
 
-            if (!string.IsNullOrWhiteSpace(ContentData.ItunesUrl))
-                s.Append($@"/<a href=""{ContentData.ItunesUrl}"" target=""_blank"">iTunes</a>");
+        if (!string.IsNullOrWhiteSpace(ContentData.ItunesUrl))
+            s.Append($@"/<a href=""{ContentData.ItunesUrl}"" target=""_blank"">iTunes</a>");
             
-            if (!string.IsNullOrWhiteSpace(ContentData.SpotifyUrl))
-                s.Append($@"/<a href=""{ContentData.SpotifyUrl}"" target=""_blank"">Spotify</a>");
+        if (!string.IsNullOrWhiteSpace(ContentData.SpotifyUrl))
+            s.Append($@"/<a href=""{ContentData.SpotifyUrl}"" target=""_blank"">Spotify</a>");
 
-            s.Append("</p>");
-        }
+        s.Append("</p>");
+    }
 
-        private static string DateString(DateTime pubDate) =>
-            GetRfc822Date(pubDate);
+    private static string DateString(DateTime pubDate) =>
+        GetRfc822Date(pubDate);
         
-        private static string GetRfc822Date(DateTime date)
+    private static string GetRfc822Date(DateTime date)
+    {
+        var offset = TimeZone.CurrentTimeZone.GetUtcOffset(DateTime.Now).Hours;
+        var timeZone = "+" + offset.ToString().PadLeft(2, '0');
+        if (offset < 0)
         {
-            var offset = TimeZone.CurrentTimeZone.GetUtcOffset(DateTime.Now).Hours;
-            var timeZone = "+" + offset.ToString().PadLeft(2, '0');
-            if (offset < 0)
-            {
-                // ReSharper disable once IntVariableOverflowInUncheckedContext
-                var i = offset * -1;
-                timeZone = "-" + i.ToString().PadLeft(2, '0');
-            }
-            return date.ToString("ddd, dd MMM yyyy HH:mm:ss " + timeZone.PadRight(5, '0'), System.Globalization.CultureInfo.InvariantCulture);
+            // ReSharper disable once IntVariableOverflowInUncheckedContext
+            var i = offset * -1;
+            timeZone = "-" + i.ToString().PadLeft(2, '0');
         }
+        return date.ToString("ddd, dd MMM yyyy HH:mm:ss " + timeZone.PadRight(5, '0'), System.Globalization.CultureInfo.InvariantCulture);
     }
 }

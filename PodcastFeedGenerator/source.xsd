@@ -11,7 +11,7 @@
                   <xs:sequence>
                     <xs:element name="title" type="xs:string" />
                     <xs:element name="filename" type="xs:string" />
-                    <xs:element name="publishdate" type="xs:date" />
+                    <xs:element name="publishDate" type="xs:date" />
                     <xs:element name="description" type="xs:string" />
                     <xs:element name="htmlDescription">
                       <xs:complexType>

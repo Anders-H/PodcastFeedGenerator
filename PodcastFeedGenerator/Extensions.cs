@@ -1,10 +1,9 @@
 ﻿using System;
 
-namespace PodcastFeedGenerator
+namespace PodcastFeedGenerator;
+
+public static class Extensions
 {
-    public static class Extensions
-    {
-        public static DateTime AsDate(this string me)
-            => DateTime.Parse(me);
-    }
+    public static DateTime AsDate(this string me)
+        => DateTime.Parse(me);
 }
